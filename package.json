@@ -1,0 +1,25 @@
+{
+  "name": "project-service",
+  "version": "1.0.0",
+  "main": "setup.js",
+  "scripts": {
+    "start": "node service.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team-WhiteWolf/project-service.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Team-WhiteWolf/project-service/issues"
+  },
+  "homepage": "https://github.com/Team-WhiteWolf/project-service#readme",
+  "dependencies": {
+    "mysql2": "^1.5.3",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {},
+  "description": ""
+}
