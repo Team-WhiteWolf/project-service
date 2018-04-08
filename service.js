@@ -26,8 +26,33 @@ serviceBusService.receiveQueueMessage((queureName + '-recieve'), function (error
         // Message received and deleted
         switch (receivedMessage.type) {
             //TODO
-
-
+            case "Add_Issue_To_Milestone":
+                addIssueMilestone(receivedMessage.payload.issueId, receivedMessage.payload.milestoneId);
+                break;
+            case "Get_IssueId_From_Milestone":
+                getIssueIdMilestone(receivedMessage.payload.milestoneId);
+                break;
+            case "Remove_Milestone":
+                removeIssueMilestone(receivedMessage.payload.issueId, receivedMessage.payload.milestoneId);
+                break;
+            case "Create_Project":
+                createProject(receivedMessage.payload.creatorId, receivedMessage.payload.iconId, receivedMessage.payload.name, receivedMessage.payload.description);
+                break;
+            case "Get_Icon":
+                getIcon(receivedMessage.payload.projectId);
+                break;
+            case "Set_Icon":
+                setIcon(receivedMessage.payload.projectId, receivedMessage.payload.iconId);
+                break;
+            case "Get_Project_Name":
+                getName(receivedMessage.payload.projectId);
+                break;
+            case "Get_Project_Description":
+                getDescription(receivedMessage.payload.projectId);
+                break;
+            case "Get_Project_Creation_Date":
+                getCreationDate(receivedMessage.payload.projectId);
+                break;
         }
     }
 });
@@ -74,47 +99,17 @@ function removeMilestone(milestoneId) {
         if (err) throw err;
     });
 }
-function getMilestones() {
-    
-}
 
-function createProject() {
-
-}
-function getProjects() {
-
-}
-function getIcon() {
-
-}
-function setIcon() {
-
-}
-function getName() {
-
-}
-function getDescription() {
-
-}
-function getCreationDate() {
-
-}
-
-
-
-//adds a permission to an user
-function addUserPermission(userId, permissionId) {
-    var sql = "INSERT INTO UserPermission (userId, permissionId) VALUES (?, ?);";
-    var values = [userId, permissionId];
-
+function createProject(creatorId, iconId, name, description) {
+    var sql = "INSERT INTO Project (id, creatorId, iconId, name, description, creationDate) VALUES (?, ?, ?, ?, ?, ?);";
+    var values = [uuidv4, creatorId, iconId, name, description, this.date];
     conn.query(sql, values, function (err, results, fields) {
         if (err) throw err;
     });
 }
-//returns all the permissions of an user
-function getUserPermissions(userId) {
-    var sql = "SELECT p.permission FROM UserPermission u INNER JOIN Permission p ON u.permissionId == p.permissionId WHERE userId == " + userId;
 
+function getIcon(projectId) {
+    var sql = "SELECT iconId FROM Project WHERE id == " + projectId;
     conn.query(sql, function (err, results, fields) {
         if (err) {
             throw err;
@@ -123,28 +118,11 @@ function getUserPermissions(userId) {
         }
     });
 }
-//removes a permission from a user
-function removeUserPermission(userId, permissionId) {
-    var sql = "DELETE FROM UserPermission WHERE userId == " + userId + " AND permissionId == " + permissionId;
-
-    conn.query(sql, function (err, results, fields) {
-        if (err) throw err;
-    });
+function setIcon(projectId, iconId) {
+    //TODO
 }
-
-//adds a permission to a group
-function addGroupPermission(groupId, permissionId) {
-    var sql = "INSERT INTO GroupPermission (groupId, permissionId) VALUES (?, ?);";
-    var values = [groupId, permissionId];
-
-    conn.query(sql, values, function (err, results, fields) {
-        if (err) throw err;
-    });
-}
-//returns all the permissions of a group
-function getGroupPermissions(groupId) {
-    var sql = "SELECT p.permission FROM GroupPermission u INNER JOIN Permission p ON u.permissionId == p.permissionId WHERE userId == " + groupId;
-
+function getName(projectId) {
+    var sql = "SELECT name FROM Project WHERE id == " + projectId;
     conn.query(sql, function (err, results, fields) {
         if (err) {
             throw err;
@@ -153,25 +131,26 @@ function getGroupPermissions(groupId) {
         }
     });
 }
-//removes a permission from a group
-function removeGroupPermission(groupId) {
-    var sql = "DELETE FROM GroupPermission WHERE groupId == " + groupId + " AND permissionId == " + permissionId;
-
+function getDescription(projectId) {
+    var sql = "SELECT name FROM Project WHERE id == " + projectId;
     conn.query(sql, function (err, results, fields) {
-        if (err) throw err;
+        if (err) {
+            throw err;
+        } else {
+            send(result);
+        }
     });
 }
-
-//adds a permission
-function addPermission(permissionText) {
-    var sql = "INSERT INTO Permission (id, permission) VALUES (?, ?);";
-    var values = [uuidv4, permissionText];
-
-    conn.query(sql, values, function (err, results, fields) {
-        if (err) throw err;
+function getCreationDate(projectId) {
+    var sql = "SELECT creationDate FROM Project WHERE id == " + projectId;
+    conn.query(sql, function (err, results, fields) {
+        if (err) {
+            throw err;
+        } else {
+            send(result);
+        }
     });
 }
-
 
 
 
